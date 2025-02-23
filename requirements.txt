@@ -1,5 +1,5 @@
 spotipy==2.23.0
-applemusicpy==0.3.5
+apple-music-python==1.2.3
 Pillow==10.2.0
 python-dotenv==1.0.0
 fuzzywuzzy==0.18.0

@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import applemusicpy
+from apple_music_python import AppleMusic  # Change this line
 import requests
 from PIL import Image
 from io import BytesIO
@@ -52,8 +52,13 @@ class PlaylistArtSync:
             
             if not all([key_id, team_id, secret_key]):
                 raise ValueError("Missing required Apple Music credentials")
-                
-            self.am = applemusicpy.AppleMusic(secret_key, key_id, team_id)
+            
+            # Updated client initialization
+            self.am = AppleMusic(
+                secret_key=secret_key,
+                key_id=key_id,
+                team_id=team_id
+            )
             logger.info("Apple Music client initialized successfully")
         except Exception as e:
             logger.error(f"Failed to initialize Apple Music client: {str(e)}")
@@ -108,6 +113,16 @@ class PlaylistArtSync:
                 logger.error(f"Failed to process artwork: {str(e)}")
                 return None
         return None
+
+    def get_apple_music_playlists(self):
+        """Get all playlists from Apple Music"""
+        try:
+            # Get the user's playlists
+            playlists = self.am.library.playlists()
+            return playlists.items
+        except Exception as e:
+            logger.error(f"Failed to fetch Apple Music playlists: {str(e)}")
+            raise
 
     def sync_artwork(self):
         """Main function to sync artwork between platforms with error handling"""
